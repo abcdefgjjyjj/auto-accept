@@ -1,0 +1,64 @@
+mode: llm
+llm:
+  api_key: YOUR_API_KEY
+  base_url: https://api.llm.com
+  model: llm-v4-flash
+  timeout: 15
+  max_retries: 2
+  extra_params:
+    temperature: 0.1
+    max_tokens: 256
+review:
+  system_prompt: "你是一个命令审查器。你收到的是一段 LLM CLI 即将执行的命令或工具调用。\n\n判断规则：\n- 默认允许执行\n\
+    - 只有以下情况才回复 DENY：\n  1. rm -rf / 或删除系统关键文件\n  2. 格式化磁盘、修改系统核心配置\n  3. 推送代码到 main/master\
+    \ 分支\n  4. 强制推送到远程仓库 (--force push)\n  5. 执行从网络下载的未审查脚本\n  6. 修改 ~/.ssh 等敏感目录\n\
+    \  7. 泄露 API 密钥/密码到外部\n- 如果只是操作当前项目文件、运行测试、安装依赖等，回复 ALLOW\n\n回复格式（严格遵守）：\n- 允许：ALLOW\n\
+    - 拒绝：DENY: <简短理由>\n"
+prompt_patterns:
+- \[y/n\]
+- \(y/n\)
+- yes/no
+- yes or no
+- Do you want to proceed
+- Allow this tool
+- Proceed\?
+- Continue\?
+monitor:
+  detect_method: auto
+  scan_interval: 1.5
+  mode: always_yes
+  diff_threshold: 0.03
+  diff_stable_frames: 2
+  diff_cooldown: 5.0
+  min_confidence: 1
+  prompt_patterns:
+  - \[y/n\]
+  - \(y/n\)
+  - yes/no
+  - yes or no
+  - Do you want to proceed
+  - Allow this tool
+  - Proceed\?
+  - Continue\?
+  - Accept
+  - Confirm
+  - 是否
+  - 确认
+  - 允许
+  tesseract_cmd: null
+  tesseract_lang: eng+chi_sim
+  hotkey_toggle: ctrl+shift+a
+  hotkey_once: ctrl+shift+x
+  focus_window: true
+  screenshot_bottom_ratio: 0.4
+  window_title_contains: llm
+  window_geometry:
+    left: 962
+    top: 303
+    width: 873
+    height: 686
+  debug_screenshot_dir: null
+logging:
+  level: INFO
+  file: auto_accept.log
+  console: true
